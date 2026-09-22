@@ -1,0 +1,79 @@
+name: Bump marketplace version
+
+# Every push to main — direct commit or merged PR — bumps the major version in
+# .claude-plugin/marketplace.json and commits the result back to main.
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+# Serialize runs so two pushes landing together can't race on the same file.
+concurrency:
+  group: bump-version-main
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    # A push made with GITHUB_TOKEN does not trigger workflows, so this job cannot
+    # retrigger itself. The message guard is a second line of defence, in case the
+    # push step is ever switched to a PAT or a GitHub App token.
+    if: "!startsWith(github.event.head_commit.message, 'Bump marketplace version')"
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Bump major version
+        id: bump
+        run: |
+          set -euo pipefail
+          file=.claude-plugin/marketplace.json
+
+          current=$(jq -er '.version' "$file")
+          if [[ ! $current =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error file=$file::version '$current' is not MAJOR.MINOR.PATCH"
+            exit 1
+          fi
+
+          next="$(( ${current%%.*} + 1 )).0.0"
+          jq --arg v "$next" '.version = $v' "$file" > "$file.tmp"
+          mv "$file.tmp" "$file"
+
+          echo "current=$current" >> "$GITHUB_OUTPUT"
+          echo "next=$next" >> "$GITHUB_OUTPUT"
+          echo "Bumped $current -> $next"
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- .claude-plugin/marketplace.json; then
+            echo "No change to commit."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .claude-plugin/marketplace.json
+          git commit -m "Bump marketplace version to ${{ steps.bump.outputs.next }}"
+
+          # Another push may have landed while this job ran; rebase onto it and retry once.
+          for attempt in 1 2 3; do
+            if git push origin HEAD:main; then
+              exit 0
+            fi
+            echo "Push rejected (attempt $attempt); rebasing onto origin/main."
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo "::error::Could not push the version bump after 3 attempts."
+          exit 1
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "### Marketplace version" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`${{ steps.bump.outputs.current }}\` → \`${{ steps.bump.outputs.next }}\`" >> "$GITHUB_STEP_SUMMARY"

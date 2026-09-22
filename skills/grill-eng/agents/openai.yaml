@@ -1,0 +1,5 @@
+interface:
+  display_name: "Grill Eng"
+  short_description: "Refine a ticket, engineering decisions only"
+policy:
+  allow_implicit_invocation: false

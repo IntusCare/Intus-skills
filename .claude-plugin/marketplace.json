@@ -1,0 +1,16 @@
+{
+  "name": "intus-skills",
+  "description": "Shared engineering skills: refine, grill, PR review, incident triage",
+  "version": "7.0.0",
+  "owner": {
+    "name": "Amit Bansil",
+    "email": "amit.bansil@intus.care"
+  },
+  "plugins": [
+    {
+      "name": "i",
+      "source": "./",
+      "description": "Shared engineering skills: refine, grill, PR review, incident triage"
+    }
+  ]
+}

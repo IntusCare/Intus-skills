@@ -1,0 +1,5 @@
+interface:
+  display_name: "Grill Jira"
+  short_description: "Refine a Jira ticket into a buildable one"
+policy:
+  allow_implicit_invocation: false
