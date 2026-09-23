@@ -36,7 +36,7 @@ reviewability budget:
 
 | Class         | Matches                                            |
 | ------------- | -------------------------------------------------- |
-| Documentation | `<doc globs>` — **except `<agent-instruction tree>`**, see below |
+| Documentation | `<doc globs>` — **except `<agent-instruction tree>` and `docs/intus-skills/**`**, see below |
 | Tests         | `<test globs, fixture globs, the e2e package>`      |
 
 **Constrained** — a superset of the above. Excluded from the reviewability budget only; path floors
@@ -66,12 +66,14 @@ this document.
 | Operative instruction content                              | Not operative                                            |
 | ---------------------------------------------------------- | -------------------------------------------------------- |
 | `<agent tree>` — every agent, skill, and doc; a new subdirectory is covered on the day it is created | `<retrospective paper-trail paths>` — no command reads them |
-| `AGENTS.md`, `CLAUDE.md`                                   | `<eval suites>` — they assert the rules rather than state them |
+| `docs/intus-skills/**` — repo config the Intus-skills plugin reads, including these rules | `<eval suites>` — they assert the rules rather than state them |
+| `AGENTS.md`, `CLAUDE.md`                                   |                                                          |
 | `<any other instruction file — a review rubric, a prompt>` | `<human-prose docs>`                                     |
 
-Without this row, an agent-instruction tree nested under a `docs/` path matches the documentation
-glob, is skipped by step 5, and the governance rule below becomes **unable to fire on the very rules
-it protects** — a diff that weakens a rule assesses Very Low and FAST-TRACK ELIGIBLE.
+Keep the `docs/intus-skills/**` row in every repo: the plugin always puts its config there, where
+a `docs/**` documentation glob will match it. Without these rows, an agent-instruction tree nested
+under a `docs/` path — `docs/intus-skills/**` included — matches the documentation glob, is skipped
+by step 5, and the governance rule below becomes **unable to fire on the very rules it protects** — a diff that weakens a rule assesses Very Low and FAST-TRACK ELIGIBLE.
 
 **Why these files are not Constrained.** The constrained class exists for files whose line count
 overstates the review burden because skimming them is cheap. Instruction content is the opposite:
@@ -144,7 +146,7 @@ Every HIGH row in step 3, plus:
 | Surface               | Paths                                              |
 | --------------------- | -------------------------------------------------- |
 | Secrets & credentials | `<env globs>`, anything adding a credential literal |
-| Agent governance      | `AGENTS.md`, `CLAUDE.md`, `<the whole agent tree>`  |
+| Agent governance      | `AGENTS.md`, `CLAUDE.md`, `<the whole agent tree>`, `docs/intus-skills/**` |
 
 Human-only **requires a human decision but does not raise the risk band.** An operative
 instruction-content edit is 🟢 Low, because step 1 leaves it non-constrained and so step 2 gives the
