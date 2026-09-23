@@ -26,4 +26,4 @@ would either hang the chain or produce a confirmation no human gave.
 To get the assessment without publishing it, run `/i:pr-risk` directly and answer "no" — not through
 this skill, which always publishes.
 
-Add the ticket-coverage comment described in `docs/intus-skills/pr-conventions.md`. If a comment with that title already exists, hide it and mark it outdated.
+Add the ticket-coverage comment described in `docs/intus-skills/pr-conventions.md`, using its title and body shape exactly. If a comment with that title already exists, hide it and mark it outdated. If the file has no ticket-coverage section, the repo doesn't want one: skip it.
