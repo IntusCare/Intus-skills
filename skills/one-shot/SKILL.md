@@ -1,6 +1,6 @@
 ---
 name: one-shot
-description: "Take a Jira ticket from nothing to a reviewed, findings-cleared draft PR in one unattended run: /buildit then /shipit. Ends at a draft PR that a human must review, approve, and merge."
+description: "Take a Jira ticket from nothing to a reviewed, findings-cleared draft PR in one unattended run: /i:buildit then /i:shipit. Ends at a draft PR that a human must review, approve, and merge."
 disable-model-invocation: true
 argument-hint: "<JIRA-KEY> [--no-fix] [--max-iterations=N]"
 ---
@@ -8,19 +8,19 @@ argument-hint: "<JIRA-KEY> [--no-fix] [--max-iterations=N]"
 One ticket, one command, one pass: branch, tests, implementation, commits, push, PR, review, fixes.
 
 ```
-  /one-shot <KEY>
+  /i:one-shot <KEY>
         │
-        ├─► /buildit <KEY>   workon · test-first · ncommit · implement · ncommit · push
+        ├─► /i:buildit <KEY>   workon · test-first · ncommit · implement · ncommit · push
         │
-        └─► /shipit          ncommit · push · pull-request · fix
+        └─► /i:shipit          ncommit · push · pull-request · fix
 ```
 
-A **conductor of conductors**. It contributes no rules — `/buildit` and `/shipit` own everything, and they in turn own nothing that their own children don't. Its whole job is those two calls and the gate between them.
+A **conductor of conductors**. It contributes no rules — `/i:buildit` and `/i:shipit` own everything, and they in turn own nothing that their own children don't. Its whole job is those two calls and the gate between them.
 
 `$ARGUMENTS`:
 - `<TICKET-KEY>` — required, e.g. `ABC-1234`. A browse URL works. **Never invent one**; with no key, ask and end the turn on the question.
-- `--no-fix` — passed to `/shipit`: open the PR, skip the review-fixing loop.
-- `--max-iterations=N` — passed through to `/fix`.
+- `--no-fix` — passed to `/i:shipit`: open the PR, skip the review-fixing loop.
+- `--max-iterations=N` — passed through to `/i:fix`.
 
 ## Where it stops, and what stops it
 
@@ -34,48 +34,48 @@ The controls that make those lines hold do not live in this file, and they shoul
 
 1. **Branch protection on the remote** — required human approval, required checks, no direct pushes to shared branches. This is the boundary. A chain that misbehaves still ends at a draft PR nobody has approved.
 2. **Repo configuration** — `docs/intus-skills/` tells `push` and `shipit` which branches are shared and which hooks a push must satisfy.
-3. **The `git-guardrails-claude-code` hook**, for anyone who wants the agent unable to push at all. It fails closed and it makes this chain stop at the second `/ncommit`.
+3. **The `git-guardrails-claude-code` hook**, for anyone who wants the agent unable to push at all. It fails closed and it makes this chain stop at the second `/i:ncommit`.
 
-`disable-model-invocation: true` is set on this skill on top of those, so that a bare mention of a ticket key cannot start the whole chain without a human typing the command. That is a speed bump, not one of the boundaries above: `/buildit` and `/shipit` are model-invocable and between them do every step, because a conductor cannot inline six skills and `AGENTS.md` reads the flag as "perform the steps directly". Rely on the three controls, not on the flag.
+`disable-model-invocation: true` is set on this skill on top of those, so that a bare mention of a ticket key cannot start the whole chain without a human typing the command. That is a speed bump, not one of the boundaries above: `/i:buildit` and `/i:shipit` are model-invocable and between them do every step, because a conductor cannot inline six skills and `AGENTS.md` reads the flag as "perform the steps directly". Rely on the three controls, not on the flag.
 
-**Not callable from other skills.** Per `AGENTS.md`, a `disable-model-invocation` skill is normally one whose steps you perform directly instead. **Not this one.** A skill that wants this chain should call `/buildit` and `/shipit` itself.
+**Not callable from other skills.** Per `AGENTS.md`, a `disable-model-invocation` skill is normally one whose steps you perform directly instead. **Not this one.** A skill that wants this chain should call `/i:buildit` and `/i:shipit` itself.
 
 ---
 
-## Stage 1 — `/buildit`
+## Stage 1 — `/i:buildit`
 
 ```
-Skill(skill: "buildit", args: "<KEY>")
+Skill(skill: "i:buildit", args: "<KEY>")
 ```
 
 Branch, red tests, implementation, commits, push. Its own preconditions apply — a clean working tree, and a real ticket.
 
 ## The gate
 
-**`/buildit` reporting anything other than `COMPLETE` stops the run.**
+**`/i:buildit` reporting anything other than `COMPLETE` stops the run.**
 
-The case that matters is `/implement` returning `BLOCKED`: the suite is red after five attempts, `/buildit` has committed the partial work and skipped its push. Do not hand that to `/shipit`. Opening a PR on a red branch spends an automated review, a risk assessment, and a `/fix` loop on code that isn't finished, and puts a reviewer's name on it.
+The case that matters is `/i:implement` returning `BLOCKED`: the suite is red after five attempts, `/i:buildit` has committed the partial work and skipped its push. Do not hand that to `/i:shipit`. Opening a PR on a red branch spends an automated review, a risk assessment, and a `/i:fix` loop on code that isn't finished, and puts a reviewer's name on it.
 
-Stop, report what `/buildit` said, and give the resume command:
-
-```
-/buildit <KEY> --from=implement     # finish the implementation
-/shipit                             # then ship it
-```
-
-## Stage 2 — `/shipit`
+Stop, report what `/i:buildit` said, and give the resume command:
 
 ```
-Skill(skill: "shipit", args: "[--no-fix] [--max-iterations=N]")
+/i:buildit <KEY> --from=implement     # finish the implementation
+/i:shipit                             # then ship it
 ```
 
-PR, review, fixes. Its first two stages are near no-ops here — `/buildit` left the tree clean and pushed, so `/ncommit` skips and `/push` reports up to date. That is deliberate: `/buildit` guarantees the work reaches `origin` on its own, and paying one redundant no-op push is better than a chain where a `/shipit` failure strands committed work locally.
+## Stage 2 — `/i:shipit`
 
-`/shipit` finishing with findings still open is a **successful** run. The PR is up, honest about what is unresolved, and waiting on a human.
+```
+Skill(skill: "i:shipit", args: "[--no-fix] [--max-iterations=N]")
+```
+
+PR, review, fixes. Its first two stages are near no-ops here — `/i:buildit` left the tree clean and pushed, so `/i:ncommit` skips and `/i:push` reports up to date. That is deliberate: `/i:buildit` guarantees the work reaches `origin` on its own, and paying one redundant no-op push is better than a chain where a `/i:shipit` failure strands committed work locally.
+
+`/i:shipit` finishing with findings still open is a **successful** run. The PR is up, honest about what is unresolved, and waiting on a human.
 
 ## Report
 
-Print the two stages, then quote their reports in full underneath — `/buildit`'s and `/shipit`'s, which in turn carry `/test-first`'s `NOT COVERED`, `/implement`'s `PRE-EXISTING`, and `/fix`'s `STILL OPEN`. Those three lists are the whole audit trail of an unattended run; a tidy summary that drops them is worth less than no summary.
+Print the two stages, then quote their reports in full underneath — `/i:buildit`'s and `/i:shipit`'s, which in turn carry `/i:test-first`'s `NOT COVERED`, `/i:implement`'s `PRE-EXISTING`, and `/i:fix`'s `STILL OPEN`. Those three lists are the whole audit trail of an unattended run; a tidy summary that drops them is worth less than no summary.
 
 ```
 ═══════════════════════════════════════════════

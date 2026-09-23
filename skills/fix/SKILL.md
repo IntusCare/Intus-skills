@@ -7,9 +7,9 @@ argument-hint: "[--max-iterations=N] [--dry-run]"
 Work this branch's pull request until its review is clean, or until three iterations have run.
 
 ```
-  ┌─► read PR ─► collect OPEN findings ─► fix them ─► /ncommit ─► /push ─► /pull-request ─┐
-  │                                                                                        │
-  └────────────────────────  iteration 2, 3  ◄─────────────────────────────────────────────┘
+  ┌─► read PR ─► collect OPEN findings ─► fix them ─► /i:ncommit ─► /i:push ─► /i:pull-request ─┐
+  │                                                                                             │
+  └────────────────────────  iteration 2, 3  ◄──────────────────────────────────────────────────┘
                              stop early when nothing is open, or nothing got fixed
 ```
 
@@ -26,11 +26,11 @@ Work this branch's pull request until its review is clean, or until three iterat
 git status --short
 ```
 
-**Dirty tree → stop and report**, naming the paths. Step 4 calls `/ncommit`, which stages everything present (`git add -A`), and then pushes — so an unrelated edit left in the tree lands in this PR under a commit message about a review finding, on a branch someone is reviewing. Let the user commit, stash, or discard it first. This skill does not stash on their behalf: an unattended loop that moves somebody's uncommitted work has no good failure mode.
+**Dirty tree → stop and report**, naming the paths. Step 4 calls `/i:ncommit`, which stages everything present (`git add -A`), and then pushes — so an unrelated edit left in the tree lands in this PR under a commit message about a review finding, on a branch someone is reviewing. Let the user commit, stash, or discard it first. This skill does not stash on their behalf: an unattended loop that moves somebody's uncommitted work has no good failure mode.
 
 `--dry-run` is exempt — it changes nothing and never reaches Step 4.
 
-On the normal path the tree is already clean here, because `/shipit` runs `/ncommit` and `/push` before calling this skill.
+On the normal path the tree is already clean here, because `/i:shipit` runs `/i:ncommit` and `/i:push` before calling this skill.
 
 ## Step 1 — Find the PR, or fail
 
@@ -43,9 +43,9 @@ gh pr view --json number,url,state,isDraft,headRefName,baseRefName
 gh repo view --json owner,name
 ```
 
-**No PR for the current branch → stop.** Report it and name `/pull-request` as the way to create one. Do not open one here; this skill fixes reviews, it does not raise them.
+**No PR for the current branch → stop.** Report it and name `/i:pull-request` as the way to create one. Do not open one here; this skill fixes reviews, it does not raise them.
 
-A closed or merged PR is also a stop. Draft is fine — that's the normal state for a PR under `/pull-request`.
+A closed or merged PR is also a stop. Draft is fine — that's the normal state for a PR under `/i:pull-request`.
 
 ## Step 2 — Collect the findings that are still open
 
@@ -83,13 +83,13 @@ comments(first: 100) {
 | Source | Open when | Skip when |
 |---|---|---|
 | Inline review thread (Copilot, human, `/review --comment`) | `isResolved: false`, `isCollapsed: false` | resolved, collapsed, or every comment `isMinimized` |
-| `/review` findings comment — a checklist, per `/pull-request` | The line is `- [ ]` | The line is `- [x]`, or the whole comment `isMinimized` (superseded — `/pull-request` hides the previous one each run) |
+| `/review` findings comment — a checklist, per `/i:pull-request` | The line is `- [ ]` | The line is `- [x]`, or the whole comment `isMinimized` (superseded — `/i:pull-request` hides the previous one each run) |
 
 `isOutdated: true` is its own case. The line it points at has changed, so GitHub greys it out — but "the code moved" is not "the concern was answered." **Skip it for fixing, list it in the report** under `OUTDATED, NOT ADDRESSED`, so a real finding can't vanish just because the diff shifted under it.
 
 Two more exclusions:
 
-- **`/pr-risk` output is not in scope.** It rates consequence and approval level; it does not report defects. Leave its comment alone.
+- **`/i:pr-risk` output is not in scope.** It rates consequence and approval level; it does not report defects. Leave its comment alone.
 - **Dedupe across sources.** One defect commonly appears as both an inline thread and a checklist line. Fix it once.
 
 ## Step 3 — Fix, or decline in writing
@@ -104,7 +104,7 @@ gh api graphql -f query='
   -f id="$THREAD_ID"
 ```
 
-Checklist items need no action — `/pull-request` regenerates that comment from a fresh review each run.
+Checklist items need no action — `/i:pull-request` regenerates that comment from a fresh review each run.
 
 **Decline it,** and reply on the thread saying why, in the repo's house style (`docs/intus-skills/pr-conventions.md`: concise, imperative, one concern). Then resolve it. A reviewer is not always right — Copilot in particular flags things this repo has decided against — but an unanswered comment is indistinguishable from an ignored one.
 
@@ -117,17 +117,17 @@ Rules while fixing:
 ## Step 4 — Commit, push, re-review
 
 ```
-Skill(skill: "ncommit")
-Skill(skill: "push", args: "--no-commit")
-Skill(skill: "pull-request")
+Skill(skill: "i:ncommit")
+Skill(skill: "i:push", args: "--no-commit")
+Skill(skill: "i:pull-request")
 ```
 
-The tree was clean at Step 0, so everything `/ncommit` stages is this iteration's fixes and nothing else.
+The tree was clean at Step 0, so everything `/i:ncommit` stages is this iteration's fixes and nothing else.
 
-`/ncommit` has just run, so there is nothing left for `/push` to commit — `--no-commit` says that
-rather than relying on it, the same way `/shipit` does at the same seam.
+`/i:ncommit` has just run, so there is nothing left for `/i:push` to commit — `--no-commit` says that
+rather than relying on it, the same way `/i:shipit` does at the same seam.
 
-`/pull-request` is what refreshes the review: it re-runs `/review` against the updated diff, hides the previous findings comment as outdated, and posts a new checklist. That is what makes iteration N+1 see *new* findings rather than the old list.
+`/i:pull-request` is what refreshes the review: it re-runs `/review` against the updated diff, hides the previous findings comment as outdated, and posts a new checklist. That is what makes iteration N+1 see *new* findings rather than the old list.
 
 Copilot re-reviews on push by itself, but not instantly. Give it a moment before Step 2 of the next iteration, or its findings land after you've already read the thread list.
 

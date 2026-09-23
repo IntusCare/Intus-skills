@@ -49,3 +49,14 @@ per comment. That applies to findings posted on a PR and to a reply declining a 
 suggestion.
 
 <!-- SEED: keep only if the repo expects a coverage or checklist comment on every PR. -->
+## Ticket-coverage comment
+
+`pull-request` posts this as a separate PR comment and finds its earlier copy by the exact title, so
+keep the title stable. Changing it leaves the old comment visible, unhidden, next to the new one.
+
+- **Title:** `"<exact comment title>"`
+- **Body:** one line per requirement in the ticket (each acceptance criterion, plus any requirement
+  stated only in the description), marked **solved**, **partly solved**, or **not solved** by this
+  diff, with the file or test that shows it. A requirement the diff leaves alone on purpose is
+  **not solved** with a one-line reason — never dropped from the list.
+- **On update:** hide the previous comment with this title as outdated, then post the new one.

@@ -8,7 +8,7 @@ it.
 
 The skills are **repo-agnostic**. Everything specific to a repo — its issue tracker, branch naming,
 test commands, code standards, PR conventions, and risk policy — lives in that repo's
-`docs/intus-skills/`, which [`/setup-intus-skills`](skills/setup-intus-skills/) writes. A skill whose
+`docs/intus-skills/`, which [`/i:setup-intus-skills`](skills/setup-intus-skills/) writes. A skill whose
 config file is missing says so rather than guessing.
 
 ## What the workflow skills never do
@@ -81,8 +81,8 @@ hook, which fails closed.
 
 ## Infrequently used / infra
 
-Run [`/setup-intus-skills`](skills/setup-intus-skills/) once in a new repo. It delegates the tracker,
-triage labels, and domain docs to `/setup-matt-pocock-skills`, then writes the rest.
+Run [`/i:setup-intus-skills`](skills/setup-intus-skills/) once in a new repo. It delegates the tracker,
+triage labels, and domain docs to `/i:setup-matt-pocock-skills`, then writes the rest.
 
 ### Design and codebase health
 

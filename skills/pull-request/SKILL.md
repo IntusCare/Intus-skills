@@ -17,13 +17,13 @@ you did so without repo conventions, and carry on.
 
 Run `/review` in the house comment style (`docs/intus-skills/pr-conventions.md`) and upload the findings into a comment on the PR. Each finding should be a checklist item that can be ticked off. If an existing '/review' comment exists hide it and mark it as outdated.
 
-Run `/pr-risk` on this PR and publish the results to the PR. This instruction is what satisfies
-`/pr-risk` step 6's publish confirmation — see the exception noted there. It satisfies it however
-this skill was reached: typed directly, or called by `/shipit`, `/fix`, or `/one-shot`. This skill
+Run `/i:pr-risk` on this PR and publish the results to the PR. This instruction is what satisfies
+`/i:pr-risk` step 6's publish confirmation — see the exception noted there. It satisfies it however
+this skill was reached: typed directly, or called by `/i:shipit`, `/i:fix`, or `/i:one-shot`. This skill
 is model-invocable on purpose, and those conductors cannot stop to answer a prompt; asking them
 would either hang the chain or produce a confirmation no human gave.
 
-To get the assessment without publishing it, run `/pr-risk` directly and answer "no" — not through
+To get the assessment without publishing it, run `/i:pr-risk` directly and answer "no" — not through
 this skill, which always publishes.
 
-Add the ticket-coverage comment described in `docs/intus-skills/pr-conventions.md`. If a comment with that title already exists, hide it and mark it outdated.
+Add the ticket-coverage comment described in `docs/intus-skills/pr-conventions.md`, using its title and body shape exactly. If a comment with that title already exists, hide it and mark it outdated. If the file has no ticket-coverage section, the repo doesn't want one: skip it.

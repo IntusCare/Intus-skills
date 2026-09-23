@@ -50,7 +50,7 @@ plans, same write-back.
 
 ## Step 2 — Grill
 
-- Call `Skill(skill: "grilling")` on the ticket, scoped by `--audience` if set.
+- Call `Skill(skill: "i:grilling")` on the ticket, scoped by `--audience` if set.
 - **Write nothing to Jira until the user confirms shared understanding.** That confirmation is the gate for Steps 3 and 4.
 - Facts are yours to find, decisions are the user's — including anything the ticket left contradictory.
 

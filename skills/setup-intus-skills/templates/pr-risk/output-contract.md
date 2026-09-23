@@ -150,7 +150,7 @@ event and the finding selection separately from the assessment itself.
 
 Re-verify the head SHA immediately before posting. If it moved, stop:
 
-> The PR head moved from `<reviewed>` to `<current>` during review. Re-run `/pr-risk` against the
+> The PR head moved from `<reviewed>` to `<current>` during review. Re-run `/i:pr-risk` against the
 > new commit.
 
 **Review with inline findings** — one API call, body piped via `--input -` so nested arrays
@@ -184,7 +184,7 @@ failed to create review: GraphQL: Review Can not request changes on your own
 pull request (addPullRequestReview)
 ```
 
-Since `/pr-risk` is usually run by the PR's author, this is the common case, not the edge case.
+Since `/i:pr-risk` is usually run by the PR's author, this is the common case, not the edge case.
 When the author is the token owner, publish the same body as a **PR comment** via `gh pr comment`
 and lead with one line saying the event was refused and what the disposition still is:
 

@@ -22,14 +22,14 @@ This is prompt-driven, not a script. Explore, propose, confirm, then write.
 
 | File                         | Read by                                                    | Source              |
 | ---------------------------- | ---------------------------------------------------------- | ------------------- |
-| `issue-tracker.md`           | `to-spec`, `to-tickets`, `wayfinder`, `mp-code-review`     | delegated (half 1)  |
+| `issue-tracker.md`           | `to-spec`, `to-tickets`, `wayfinder`, `grill-jira`         | delegated (half 1)  |
 | `triage-labels.md`           | `triage`, `to-spec`, `to-tickets`                          | delegated (half 1)  |
-| `domain.md`                  | nothing by filename — it records the `CONTEXT.md` and ADR layout that `grill-with-docs` and `domain-modeling` operate on | delegated (half 1) |
-| `tickets-and-branches.md`    | `workon`, `buildit`, `test-first`, `implement`, `pull-request` | you              |
+| `domain.md`                  | `test-first`; it records the `CONTEXT.md` and ADR layout that `grill-with-docs` and `domain-modeling` operate on | delegated (half 1) |
+| `tickets-and-branches.md`    | `workon`, `buildit`, `test-first`, `implement`, `pull-request`, `push`, `shipit`, `one-shot`, `grill-jira` | you |
 | `test-layers.md`             | `test-first`, `implement`                                  | you                 |
 | `test-commands.md`           | `test-first`, `implement`                                  | you                 |
 | `pre-existing-failures.md`   | `implement`                                                | you                 |
-| `code-standards.md`          | `implement`                                                | you                 |
+| `code-standards.md`          | `implement`, `fix`                                         | you                 |
 | `pr-conventions.md`          | `pull-request`, `fix`                                      | you                 |
 | `test-plans.md`              | `grill-jira`                                               | you                 |
 | `pr-risk-path-policy.md`     | `pr-risk`                                                  | you                 |
@@ -113,7 +113,7 @@ Run `setup-matt-pocock-skills` **before writing anything**. It settles the issue
 `tickets-and-branches.md` builds on, and it creates the `## Agent skills` block in
 `CLAUDE.md`/`AGENTS.md` that you extend in step 5.
 
-Try `Skill(skill: "setup-matt-pocock-skills")`. It is marked `disable-model-invocation`, so the call
+Try `Skill(skill: "i:setup-matt-pocock-skills")`. It is marked `disable-model-invocation`, so the call
 may be refused — when it is, read `../setup-matt-pocock-skills/SKILL.md` and follow it end to end
 yourself, seed templates included. Either route, let it ask its own questions; don't answer them on
 the user's behalf or pre-empt them with your own.

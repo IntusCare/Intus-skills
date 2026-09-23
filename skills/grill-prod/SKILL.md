@@ -1,13 +1,13 @@
 ---
 name: grill-prod
-description: "Refine a Jira ticket with a product manager in the room: the /grill-jira flow, asking only the decisions a PM can settle. Engineering decisions get recorded, not asked."
+description: "Refine a Jira ticket with a product manager in the room: the /i:grill-jira flow, asking only the decisions a PM can settle. Engineering decisions get recorded, not asked."
 argument-hint: "<TICKET-KEY>"
 disable-model-invocation: true
 ---
 
-Run `/grill-jira` with `--audience=product`.
+Run `/i:grill-jira` with `--audience=product`.
 
-- Try `Skill(skill: "grill-jira", args: "<KEY> --audience=product")`. `grill-jira` is
+- Try `Skill(skill: "i:grill-jira", args: "<KEY> --audience=product")`. `grill-jira` is
   `disable-model-invocation`, so the call may be refused — then read
   [../grill-jira/SKILL.md](../grill-jira/SKILL.md) and follow it end to end with that audience.
 - Ask only what a product manager can settle: scope in and out, acceptance criteria, behaviour at
