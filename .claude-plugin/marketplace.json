@@ -1,7 +1,7 @@
 {
   "name": "Intus-skills",
   "description": "Shared engineering skills: refine, grill, PR review, incident triage",
-  "version": "9.0.0",
+  "version": "10.0.0",
   "owner": {
     "name": "Amit Bansil",
     "email": "amit.bansil@intus.care"
