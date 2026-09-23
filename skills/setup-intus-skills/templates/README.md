@@ -33,8 +33,8 @@ configured that skill, and the skill says so rather than guessing.
 
 | Skill                                            | Reads                                                                 |
 | ------------------------------------------------ | --------------------------------------------------------------------- |
-| `workon`, `buildit`, `push`, `shipit`            | `tickets-and-branches.md`                                             |
-| `test-first`                                     | `tickets-and-branches.md`, `test-layers.md`, `test-commands.md`       |
+| `workon`, `buildit`, `push`, `shipit`, `one-shot` | `tickets-and-branches.md`                                            |
+| `test-first`                                     | `tickets-and-branches.md`, `test-layers.md`, `test-commands.md`, `domain.md` |
 | `implement`                                      | all of the above plus `pre-existing-failures.md`, `code-standards.md` |
 | `pull-request`                                   | `tickets-and-branches.md`, `pr-conventions.md`                        |
 | `fix`                                            | `pr-conventions.md`, `code-standards.md`, `pr-risk/gates.md`          |
@@ -42,4 +42,4 @@ configured that skill, and the skill says so rather than guessing.
 | `pr-risk`                                        | `pr-risk-path-policy.md` and everything under `pr-risk/`              |
 | `triage`                                         | `triage-labels.md`                                                    |
 | `to-spec`, `to-tickets`                          | `issue-tracker.md`, `triage-labels.md`                                |
-| `wayfinder`, `mp-code-review`                    | `issue-tracker.md`                                                    |
+| `wayfinder`                                      | `issue-tracker.md`                                                    |

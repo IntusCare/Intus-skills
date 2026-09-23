@@ -1,6 +1,6 @@
 ---
 name: implement
-description: "Implement the ticket identified by the current branch name — read its spec, write any tests it still needs, then work until the suite is green apart from failures that were already red on the integration branch. Use when asked to implement / build / do the ticket, or as the build step of another workflow (workon, speckit, bug-bash)."
+description: "Implement the ticket identified by the current branch name — read its spec, write any tests it still needs, then work until the suite is green apart from failures that were already red on the integration branch. Use when asked to implement / build / do the ticket, or as the build step of another workflow (buildit, one-shot)."
 argument-hint: "[--no-tests] [--scope=<path>] [--max-attempts=N] [--plan-only]"
 ---
 
@@ -43,7 +43,7 @@ keeps one, and any linked ticket the description leans on. **The spec is the acc
 
 ## Step 2 — Orient and plan
 
-1. **Find the code.** Locate the routers, collections, components, and consumers the ACs touch. Read the neighbors before writing anything — this repo's conventions are local (import style, helper naming, `describe` nesting all vary by package).
+1. **Find the code.** Locate the code the ACs touch — API handlers, data access, UI, background jobs. Read the neighbors before writing anything — conventions are often local (import style, helper naming, `describe` nesting can vary by package or module).
 2. **Find the tests that already exist.** Diffing against the repo's integration branch
    (`docs/intus-skills/tickets-and-branches.md` names it) plus the working tree shows what a prior
    `/i:test-first` run left behind. Note which ACs already have a red test.
