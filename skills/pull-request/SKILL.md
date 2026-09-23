@@ -15,7 +15,7 @@ repo-specific: `docs/intus-skills/pr-conventions.md`.** Follow it. If that file 
 hasn't configured these skills — write a concise Why / What changed / Testing description, say that
 you did so without repo conventions, and carry on.
 
-Run `/review` in the house comment style (`docs/intus-skills/pr-conventions.md`) and upload the findings into a comment on the PR. Each finding should be a checklist item that can be ticked off. If an existing '/review' comment exists hide it and mark it as outdated.
+Run `/code-review` in the house comment style (`docs/intus-skills/pr-conventions.md`) and upload the findings into a comment on the PR. Each finding should be a checklist item that can be ticked off. If an existing '/code-review' comment exists hide it and mark it as outdated.
 
 Run `/pr-risk` on this PR and publish the results to the PR. This instruction is what satisfies
 `/pr-risk` step 6's publish confirmation — see the exception noted there. It satisfies it however

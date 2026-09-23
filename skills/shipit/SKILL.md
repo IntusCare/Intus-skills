@@ -51,7 +51,7 @@ Notes at the seams:
 
 - **`/ncommit` first, and only when dirty.** `/push` can commit on its own, but it makes one commit; `/ncommit` splits the tree into atomic ones. That is why stage 2 gets `--no-commit` — by then there is nothing left to commit, and the flag says so rather than relying on it.
 - **A clean tree is not a no-op.** Skip stage 1, still run stage 2: the branch may hold commits that were never pushed. `/push` reports "already up to date" and costs nothing when it is.
-- **Stage 3 both creates and refreshes.** `/pull-request` opens a draft PR if there is none and updates the existing one otherwise, then posts the `/review` checklist and the `/pr-risk` assessment. Stage 4 needs that comment to exist — `/fix` reads it.
+- **Stage 3 both creates and refreshes.** `/pull-request` opens a draft PR if there is none and updates the existing one otherwise, then posts the `/code-review` checklist and the `/pr-risk` assessment. Stage 4 needs that comment to exist — `/fix` reads it.
 - **Stage 4 ends on a fresh review.** `/fix`'s last iteration finishes with its own `/pull-request` run, so the PR's findings comment reflects the final code.
 
 ## When a stage stops
