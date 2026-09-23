@@ -7,7 +7,7 @@ argument-hint: "[pr-number|pr-url]"
 Assess a pull request's **engineering risk** — consequence, blast radius, and recoverability — and
 publish an auditable review.
 
-This is not a defect hunt. `/code-review` answers *"what is wrong with this diff?"*; `/i:pr-risk` answers
+This is not a defect hunt. `/review` answers *"what is wrong with this diff?"*; `/i:pr-risk` answers
 *"how much does it matter if this is wrong, and who is qualified to approve it?"* Both may be run on
 the same PR.
 

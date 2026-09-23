@@ -1,6 +1,6 @@
 ---
 name: fix
-description: "Read this branch's PR, fix every review finding that is still open — from /code-review or Copilot — then commit, push, and re-review. Loops up to 3 times. Use when asked to fix review comments, address PR feedback, or clear a review."
+description: "Read this branch's PR, fix every review finding that is still open — from /review or Copilot — then commit, push, and re-review. Loops up to 3 times. Use when asked to fix review comments, address PR feedback, or clear a review."
 argument-hint: "[--max-iterations=N] [--dry-run]"
 ---
 
@@ -82,8 +82,8 @@ comments(first: 100) {
 
 | Source | Open when | Skip when |
 |---|---|---|
-| Inline review thread (Copilot, human, `/code-review --comment`) | `isResolved: false`, `isCollapsed: false` | resolved, collapsed, or every comment `isMinimized` |
-| `/code-review` findings comment — a checklist, per `/i:pull-request` | The line is `- [ ]` | The line is `- [x]`, or the whole comment `isMinimized` (superseded — `/i:pull-request` hides the previous one each run) |
+| Inline review thread (Copilot, human, `/review --comment`) | `isResolved: false`, `isCollapsed: false` | resolved, collapsed, or every comment `isMinimized` |
+| `/review` findings comment — a checklist, per `/i:pull-request` | The line is `- [ ]` | The line is `- [x]`, or the whole comment `isMinimized` (superseded — `/i:pull-request` hides the previous one each run) |
 
 `isOutdated: true` is its own case. The line it points at has changed, so GitHub greys it out — but "the code moved" is not "the concern was answered." **Skip it for fixing, list it in the report** under `OUTDATED, NOT ADDRESSED`, so a real finding can't vanish just because the diff shifted under it.
 
@@ -127,7 +127,7 @@ The tree was clean at Step 0, so everything `/i:ncommit` stages is this iteratio
 `/i:ncommit` has just run, so there is nothing left for `/i:push` to commit — `--no-commit` says that
 rather than relying on it, the same way `/i:shipit` does at the same seam.
 
-`/i:pull-request` is what refreshes the review: it re-runs `/code-review` against the updated diff, hides the previous findings comment as outdated, and posts a new checklist. That is what makes iteration N+1 see *new* findings rather than the old list.
+`/i:pull-request` is what refreshes the review: it re-runs `/review` against the updated diff, hides the previous findings comment as outdated, and posts a new checklist. That is what makes iteration N+1 see *new* findings rather than the old list.
 
 Copilot re-reviews on push by itself, but not instantly. Give it a moment before Step 2 of the next iteration, or its findings land after you've already read the thread list.
 
