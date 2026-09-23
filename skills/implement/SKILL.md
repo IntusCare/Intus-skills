@@ -11,7 +11,7 @@ The deliverable is working code plus a passing test scope, with any failure that
 `$ARGUMENTS` carries flags only — the ticket comes from the branch:
 
 - *(empty)* — resolve the ticket from the branch, write missing tests, implement, loop to green.
-- `--no-tests` — tests already exist (e.g. the caller ran `/test-first`); skip Step 3's authoring, still run them.
+- `--no-tests` — tests already exist (e.g. the caller ran `/i:test-first`); skip Step 3's authoring, still run them.
 - `--scope=<path>` — restrict the green loop's test runs to this path (default: inferred in Step 4).
 - `--max-attempts=N` — override the 5-attempt cap on the green loop.
 - `--plan-only` — stop after Step 2 with the change plan; write no code.
@@ -21,9 +21,9 @@ The deliverable is working code plus a passing test scope, with any failure that
 ## Invoking this from another skill
 
 Deliberately **model-invocable** (no `disable-model-invocation`). Call it as
-`Skill(skill: "implement", args: "--no-tests")` rather than reimplementing the green loop.
+`Skill(skill: "i:implement", args: "--no-tests")` rather than reimplementing the green loop.
 
-- **Accept the caller's context instead of refetching** — ticket analysis, a `/test-first` report, a list of files already touched. A caller that just ran `/test-first` should pass `--no-tests`; its `FILES` list is this skill's starting scope.
+- **Accept the caller's context instead of refetching** — ticket analysis, a `/i:test-first` report, a list of files already touched. A caller that just ran `/i:test-first` should pass `--no-tests`; its `FILES` list is this skill's starting scope.
 - **Return the Step 6 report verbatim.** Callers key off `STATUS`, `GREEN`, and `PRE-EXISTING`.
 - **Never commit, push, or open a PR**, and never transition the ticket. Those belong to the caller.
 
@@ -46,7 +46,7 @@ keeps one, and any linked ticket the description leans on. **The spec is the acc
 1. **Find the code.** Locate the routers, collections, components, and consumers the ACs touch. Read the neighbors before writing anything — this repo's conventions are local (import style, helper naming, `describe` nesting all vary by package).
 2. **Find the tests that already exist.** Diffing against the repo's integration branch
    (`docs/intus-skills/tickets-and-branches.md` names it) plus the working tree shows what a prior
-   `/test-first` run left behind. Note which ACs already have a red test.
+   `/i:test-first` run left behind. Note which ACs already have a red test.
 3. **Plan the change** as an ordered list of small steps, each of which leaves the tree compiling. Name the files.
 
 Present the plan: AC → files → tests that will prove it. With `--plan-only`, stop here.
@@ -55,7 +55,7 @@ Present the plan: AC → files → tests that will prove it. With `--plan-only`,
 
 Skip with `--no-tests`.
 
-**Do not invoke `/test-first` from here.** It is a separate pre-implementation pass that stops at red; running it inside this skill would fight the green loop it feeds. Its layer rules are worth *reading* — the `test-first` skill, Steps 3–5 — but write the tests yourself.
+**Do not invoke `/i:test-first` from here.** It is a separate pre-implementation pass that stops at red; running it inside this skill would fight the green loop it feeds. Its layer rules are worth *reading* — the `test-first` skill, Steps 3–5 — but write the tests yourself.
 
 Any AC with no test from Step 2 gets one **before** the code that satisfies it. Pick the layer by
 where the behavior is observable — **the layers, their file locations, their harnesses, and the

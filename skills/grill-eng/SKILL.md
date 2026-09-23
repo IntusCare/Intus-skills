@@ -1,13 +1,13 @@
 ---
 name: grill-eng
-description: "Refine a Jira ticket with an engineer in the room: the /grill-jira flow, asking only the decisions an engineer can settle. Product decisions get recorded, not asked."
+description: "Refine a Jira ticket with an engineer in the room: the /i:grill-jira flow, asking only the decisions an engineer can settle. Product decisions get recorded, not asked."
 argument-hint: "<TICKET-KEY>"
 disable-model-invocation: true
 ---
 
-Run `/grill-jira` with `--audience=eng`.
+Run `/i:grill-jira` with `--audience=eng`.
 
-- Try `Skill(skill: "grill-jira", args: "<KEY> --audience=eng")`. `grill-jira` is
+- Try `Skill(skill: "i:grill-jira", args: "<KEY> --audience=eng")`. `grill-jira` is
   `disable-model-invocation`, so the call may be refused — then read
   [../grill-jira/SKILL.md](../grill-jira/SKILL.md) and follow it end to end with that audience.
 - Ask only what an engineer can settle: implementation shape, seams, data model, migration,

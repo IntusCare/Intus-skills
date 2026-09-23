@@ -154,7 +154,7 @@ LOW baseline rather than the all-constrained one. A paper-trail-only edit is ðŸ”
 NEEDS HUMAN. Neither is raised by being human-only.
 
 The agent-governance row covers **every** file that changes what an agent does on a future ticket,
-not just `/pr-risk`'s own rules. Note it deliberately matches the whole tree, including the
+not just `/i:pr-risk`'s own rules. Note it deliberately matches the whole tree, including the
 paper-trail and eval paths that step 1 excludes from the reviewability budget: weakening an eval is a
 governance act even though the file costs no budget.
 

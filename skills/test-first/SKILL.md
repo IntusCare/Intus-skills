@@ -22,7 +22,7 @@ A ticket key in `$ARGUMENTS` is an override, not the normal path: use it, and sa
 
 ## Invoking this from another skill
 
-This skill is deliberately **model-invocable** (no `disable-model-invocation`). Other skills and agents should call it — `Skill(skill: "test-first", args: "--no-e2e")` — rather than reimplementing the layer choice.
+This skill is deliberately **model-invocable** (no `disable-model-invocation`). Other skills and agents should call it — `Skill(skill: "i:test-first", args: "--no-e2e")` — rather than reimplementing the layer choice.
 
 When called by another skill:
 
@@ -62,7 +62,7 @@ how the effort lands on critical paths and complex logic instead of every edge c
   reviewer can't check.
 
 When the shape of that interface is itself in question — how deep the module is, where the seam
-belongs, what it should expose — call `Skill(skill: "codebase-design")` for the vocabulary. It is a
+belongs, what it should expose — call `Skill(skill: "i:codebase-design")` for the vocabulary. It is a
 reference to consult, not a session to run.
 
 ### Anti-patterns

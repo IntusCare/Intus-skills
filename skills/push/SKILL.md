@@ -6,7 +6,7 @@ argument-hint: "[--no-commit] [--watch-ci] [--force-with-lease]"
 
 Get this branch's work onto `origin`, and resolve what the push complains about — by fixing the cause, never by removing the check that complained. Push protection, pre-push hooks, and protected branches are the remote's rules; this skill obeys them and reports when it can't.
 
-**Scope:** errors *the push itself* raises. It does not review the diff, open a PR (`/pull-request`), or chase a red CI run beyond reporting it — unless `--watch-ci` is set.
+**Scope:** errors *the push itself* raises. It does not review the diff, open a PR (`/i:pull-request`), or chase a red CI run beyond reporting it — unless `--watch-ci` is set.
 
 `$ARGUMENTS`:
 - *(empty)* — commit everything uncommitted, then push.
@@ -20,7 +20,7 @@ Get this branch's work onto `origin`, and resolve what the push complains about 
 
 ## Invoking this from another skill
 
-Model-invocable: call it as `Skill(skill: "push", args: "--no-commit")` rather than reimplementing the retry table.
+Model-invocable: call it as `Skill(skill: "i:push", args: "--no-commit")` rather than reimplementing the retry table.
 
 - **Run unattended.** Every branch below either fixes itself or terminates with a report. Do not stop to confirm routine work — staging deletions, rebasing onto a moved remote, and setting an upstream all just happen.
 - **Only three things halt it**, and each returns a report rather than a question: a protected branch, a secret in the diff, and a rejection that survived three attempts.
@@ -77,7 +77,7 @@ Read the actual error text — git names the cause. Match it, fix the cause, pus
 |---|---|---|
 | `no upstream branch` / `set-upstream` | Branch has never been pushed | `git push -u origin HEAD` |
 | `non-fast-forward` / `fetch first` / `behind its remote` | Remote has commits you don't | `git pull --rebase`, then push again. Conflicts → resolve them; if the resolution isn't obvious, stop and report them |
-| `protected branch` / `required status checks` | Pushing straight at a protected branch | Don't fight it. Report; the work needs a branch and a PR (`/pull-request`) |
+| `protected branch` / `required status checks` | Pushing straight at a protected branch | Don't fight it. Report; the work needs a branch and a PR (`/i:pull-request`) |
 | `GH013 … push cannot contain secrets` | GitHub push protection found a credential | **Never use the bypass URL.** Remove the secret from the commit (`git rebase -i`, or amend if it's the tip), report that the credential **must be rotated** — it's in the reflog — then push |
 | `file … is N MB; exceeds GitHub's 100 MB limit` | Large blob | Track it with LFS (`.gitattributes`) or drop it from history. Don't retry unchanged |
 | `git-lfs was not found on your path` (exit 2) | The LFS pre-push hook can't run | Install `git-lfs` the way `tickets-and-branches.md` says (else `git lfs install`), then push again. **Never delete the hook** to get past it — the repo tracks files in LFS (the same section lists them), and a push without it replaces them with pointer stubs |
@@ -99,7 +99,7 @@ gh pr view --json number,url,isDraft,state 2>/dev/null || echo "no PR"
 PUSHED: <branch> → origin/<branch>   |   BLOCKED: <reason>
   commits:  N   (<first> … <last>)
   attempts: N   [what was fixed, if anything]
-  PR:       #NNN <url> (draft) | none — /pull-request to open one
+  PR:       #NNN <url> (draft) | none — /i:pull-request to open one
 ```
 
 With `--watch-ci`, follow the run and report the outcome:

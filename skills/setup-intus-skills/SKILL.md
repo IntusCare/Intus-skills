@@ -113,7 +113,7 @@ Run `setup-matt-pocock-skills` **before writing anything**. It settles the issue
 `tickets-and-branches.md` builds on, and it creates the `## Agent skills` block in
 `CLAUDE.md`/`AGENTS.md` that you extend in step 5.
 
-Try `Skill(skill: "setup-matt-pocock-skills")`. It is marked `disable-model-invocation`, so the call
+Try `Skill(skill: "i:setup-matt-pocock-skills")`. It is marked `disable-model-invocation`, so the call
 may be refused — when it is, read `../setup-matt-pocock-skills/SKILL.md` and follow it end to end
 yourself, seed templates included. Either route, let it ask its own questions; don't answer them on
 the user's behalf or pre-empt them with your own.
