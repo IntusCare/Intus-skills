@@ -19,6 +19,7 @@ Pick per behavior, not per ticket. A ticket needing all of these is rare.
 | **Unit**              | The behavior is a pure function             | `<colocation convention>`      | `<runner>`   |
 | **`<integration>`**   | `<the boundary this layer covers>`          | `<path convention>`            | `<harness>`  |
 | **`<permission>`**    | `<the access-control change that needs it>` | `<path convention>`            | `<harness>`  |
+| **Eval**              | The deliverable is behavior defined in markdown or a prompt — a skill, agent, or command, or a model-backed feature — not deterministic code | `<eval directory convention>` | `<eval runner>` |
 | **E2E**               | An AC describes a flow a human clicks through, and a reviewer would only believe it by watching the browser | `<path>` | `<runner or delegate>` |
 
 ## Don't write
@@ -52,5 +53,26 @@ helper naming, and `describe` nesting all vary.
   `<the clean-slate operation>` — it nukes a concurrently running file's data.
 - `<any assertion this repo requires — response shape, not just values>`
 
+<!-- SEED: keep only if the repo has evals on disk. Name an existing eval to model new ones on. -->
+**Eval:** `test-first` owns the two-layer model (integrity vs. behavioral). This file says where
+each one lives in `<repo>`:
+
+- Integrity checks: `<file name>` — deterministic, no model calls, runs in CI.
+- Behavioral cases: `<file name>` — each case with the verdict the docs require.
+- Model a new eval on `<an existing eval's README>`.
+
 <!-- SEED: keep an E2E handoff section only if E2E is delegated to another skill rather than
-     hand-written. Say what the attended and unattended forms are, and what gets reported. -->
+     hand-written. Say what the attended and unattended forms are, and what gets reported. If the
+     workflow is user-only (`disable-model-invocation: true`), a Skill call to it is refused: make
+     both forms "plan the E2E work and name the command for the human to run". -->
+## E2E handoff
+
+E2E tests are written by `<e2e workflow>`, not by `test-first`. Its page-object and fixture rules
+live in `<where they live>`.
+
+- **Attended** (a human typed `/i:test-first`): `Skill(skill: "<e2e workflow>", args: "<KEY>")`. It
+  may stop at its own gates; the human answers them. Report the layer as `delegated`.
+- **Unattended** (`--unattended`, or any skill caller): `Skill(skill: "<e2e workflow>", args: "<KEY>
+  <its plan-only flag>")`. Report `PLANNED, NOT WRITTEN`, include the plan, and name
+  `<e2e workflow> <KEY>` as the follow-up a human runs.
+- Never pass `<its skip-the-gate flag>` from the unattended form. `test-first` Step 4 says why.

@@ -1,6 +1,6 @@
 ---
 name: test-first
-description: "Turn a ticket's requirements into failing tests before the implementation exists — unit, API integration, skill evals, and E2E, only the layers the change actually needs. Use when starting a ticket, when asked to write tests first / TDD a ticket, when the user mentions red-green-refactor or wants integration tests, or as the test step of another workflow (workon, speckit, bug-bash)."
+description: "Turn a ticket's requirements into failing tests before the implementation exists — unit, API integration, skill evals, and E2E, only the layers the change actually needs. Use when starting a ticket, when asked to write tests first / TDD a ticket, when the user mentions red-green-refactor or wants integration tests, or as the test step of another workflow (buildit, one-shot, implement)."
 argument-hint: "[--layers=unit,api,eval,e2e] [--no-e2e] [--plan-only]"
 ---
 
@@ -107,13 +107,13 @@ Restate each acceptance criterion as one or more behaviors with an observable ou
 
 | # | Behavior (given → when → then) | AC | Observable at |
 |---|---|---|---|
-| B1 | given a soft-deleted reason, getAll omits it | AC1 | tRPC response |
+| B1 | given a soft-deleted reason, getAll omits it | AC1 | API response |
 
 Name behaviors and tests in the project's own domain language: read `CONTEXT.md` if the repo has
 one, and respect the ADRs covering the area you're touching. `docs/intus-skills/domain.md` says where
 both live.
 
-**Observable at** decides the layer in Step 3: pure return value, tRPC response, rendered screen, or model output.
+**Observable at** decides the layer in Step 3: pure return value, API response, rendered screen, or model output.
 
 ## Step 3 — Choose the layers and seams
 
@@ -145,9 +145,34 @@ Whatever the layer, these hold:
   constructed, and deriving the expectation from the same allowlist or config the implementation
   reads. Step 5 catches these — but don't write them.
 
-**E2E is a handoff, not something you hand-write here.** The repo's doc says which workflow owns it
+**Eval has two layers.** It covers behavior defined in markdown or a prompt — a skill, an agent, a
+command, or a model-backed feature:
+
+- **Integrity** — deterministic, no model calls, cheap enough for CI: do the docs still agree with
+  each other and with the repo? Usually worth it whenever a ticket changes a skill's rules.
+- **Behavioral** — one model call per case: applied to a real input, does the command reach the
+  documented verdict? Worth it only when a rule's *application* is in dispute, not just its wording.
+
+Each check encodes a stated success criterion or a defect that has actually shipped, never a
+hypothetical. A model-backed product feature's evals belong here too; say so rather than filing them
+as unit tests.
+
+**E2E is a handoff, not something you hand-write here.** The repo's doc (§ E2E handoff) says which workflow owns it
 and how the handoff differs when a human is present versus when a skill called you. Skip entirely
 when `--no-e2e` is set.
+
+Unattended, E2E is **planned, not built**, for two reasons. The second is the one that forces it:
+
+- **A gate would hang the chain.** E2E workflows commonly stop for a human, and `/i:buildit` and
+  `/i:one-shot` run without one.
+- **An E2E workflow that heals its tests to green can't hand back red.** A green suite would reach
+  `/i:ncommit` as a passing test the implementation never earned, and `/i:implement` would have
+  nothing left to turn green. The layer most likely to catch a UI regression would then be the one
+  layer nothing verified.
+
+So never pass the workflow's skip-the-gate flag (often `--yes`) from here. This skill's contract is a
+red handoff. A caller that wants the full E2E build unattended calls the workflow itself after this
+skill returns.
 
 ## Step 5 — Prove red
 
