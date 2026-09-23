@@ -1,0 +1,13 @@
+{
+  "name": "i",
+  "description": "Shared engineering skills: refine, grill, PR review, incident triage",
+  "version": "9.0.0",
+  "author": {
+    "name": "Amit Bansil",
+    "email": "amit.bansil@intus.care"
+  },
+  "homepage": "https://github.com/IntusCare/Intus-skills",
+  "repository": "https://github.com/IntusCare/Intus-skills",
+  "license": "MIT",
+  "keywords": ["skills", "sdlc", "code-review", "triage", "grilling"]
+}

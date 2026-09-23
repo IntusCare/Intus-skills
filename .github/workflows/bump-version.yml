@@ -1,7 +1,8 @@
 name: Bump marketplace version
 
 # Every push to main — direct commit or merged PR — bumps the major version in
-# .claude-plugin/marketplace.json and commits the result back to main.
+# .claude-plugin/marketplace.json and .claude-plugin/plugin.json and commits the
+# result back to main.
 on:
   push:
     branches: [main]
@@ -40,8 +41,10 @@ jobs:
           fi
 
           next="$(( ${current%%.*} + 1 )).0.0"
-          jq --arg v "$next" '.version = $v' "$file" > "$file.tmp"
-          mv "$file.tmp" "$file"
+          for target in .claude-plugin/marketplace.json .claude-plugin/plugin.json; do
+            jq --arg v "$next" '.version = $v' "$target" > "$target.tmp"
+            mv "$target.tmp" "$target"
+          done
 
           echo "current=$current" >> "$GITHUB_OUTPUT"
           echo "next=$next" >> "$GITHUB_OUTPUT"
@@ -50,14 +53,14 @@ jobs:
       - name: Commit and push
         run: |
           set -euo pipefail
-          if git diff --quiet -- .claude-plugin/marketplace.json; then
+          if git diff --quiet -- .claude-plugin/marketplace.json .claude-plugin/plugin.json; then
             echo "No change to commit."
             exit 0
           fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add .claude-plugin/marketplace.json
+          git add .claude-plugin/marketplace.json .claude-plugin/plugin.json
           git commit -m "Bump marketplace version to ${{ steps.bump.outputs.next }}"
 
           # Another push may have landed while this job ran; rebase onto it and retry once.
