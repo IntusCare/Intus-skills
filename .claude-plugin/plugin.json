@@ -1,7 +1,7 @@
 {
   "name": "i",
   "description": "Shared engineering skills: refine, grill, PR review, incident triage",
-  "version": "11.0.0",
+  "version": "12.0.0",
   "author": {
     "name": "Amit Bansil",
     "email": "amit.bansil@intus.care"
