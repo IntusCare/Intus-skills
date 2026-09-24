@@ -87,7 +87,16 @@ Both get the **same frozen brief**: the ticket + the decisions the grilling sett
 
 ### Label
 
-- Apply `grilled`.
+Once the description and comment are written, add the label for the audience that ran:
+
+| `--audience` | Label |
+| --- | --- |
+| *(unset)* — `/i:grill-jira` | `grilled-jira` |
+| `eng` — `/i:grill-eng` | `grilled-eng` |
+| `product` — `/i:grill-prod` | `grilled-prod` |
+
+- **Add, don't replace:** keep every label the ticket already has, including another audience's `grilled-*` — a ticket grilled by both eng and product carries both.
+- Never apply the bare `grilled` label. Leave one already on the ticket alone.
 - Change nothing else: no status transition, no assignee, no other field.
 
 ## Report

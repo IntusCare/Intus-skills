@@ -15,4 +15,4 @@ Run `/i:grill-jira` with `--audience=eng`.
 - Scope, acceptance criteria, priority, and edge-case behaviour are **not** the engineer's to
   decide. They go to `Open questions` as `[needs product]` — never guessed, never put to the
   engineer as if they spoke for product.
-- Everything else is unchanged: same enrichment, same parallel plans, same write-back, same label.
+- Everything else is unchanged: same enrichment, same parallel plans, same write-back. The label is `grilled-eng`, which `/i:grill-jira` picks from the audience.
