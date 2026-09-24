@@ -12,10 +12,12 @@ One ticket, one command, one pass: branch, tests, implementation, commits, push,
         │
         ├─► /i:buildit <KEY>   workon · test-first · ncommit · implement · ncommit · push
         │
-        └─► /i:shipit          ncommit · push · pull-request · fix
+        ├─► /i:shipit          ncommit · push · pull-request · fix
+        │
+        └─► label the ticket   one-shot-done
 ```
 
-A **conductor of conductors**. It contributes no rules — `/i:buildit` and `/i:shipit` own everything, and they in turn own nothing that their own children don't. Its whole job is those two calls and the gate between them.
+A **conductor of conductors**. It contributes no rules — `/i:buildit` and `/i:shipit` own everything, and they in turn own nothing that their own children don't. Its whole job is those two calls, the gate between them, and labeling the ticket at the end.
 
 `$ARGUMENTS`:
 - `<TICKET-KEY>` — required, e.g. `ABC-1234`. A browse URL works. **Never invent one**; with no key, ask and end the turn on the question.
@@ -24,7 +26,7 @@ A **conductor of conductors**. It contributes no rules — `/i:buildit` and `/i:
 
 ## Where it stops, and what stops it
 
-It is the longest-reaching command here: it creates a branch, writes tests, writes code, makes several commits, pushes repeatedly, opens a pull request, posts an automated review and a risk assessment, and then pushes again while clearing findings. Everything it reaches is a **ticket branch and a draft PR**. The line it does not cross, in any stage, at any retry count:
+It is the longest-reaching command here: it creates a branch, writes tests, writes code, makes several commits, pushes repeatedly, opens a pull request, posts an automated review and a risk assessment, pushes again while clearing findings, and finally adds a label to the ticket. Everything it reaches is a **ticket branch, a draft PR, and one label on the ticket**. The line it does not cross, in any stage, at any retry count:
 
 - Never merges, never marks a PR ready for review, never submits an `APPROVE`. A human reads the diff first.
 - Never pushes to a shared branch (`docs/intus-skills/tickets-and-branches.md` names them), never force-pushes without `--force-with-lease`, never `--no-verify`, never a push-protection bypass, never deletes a hook. A secret in the diff halts the run.
@@ -73,6 +75,16 @@ PR, review, fixes. Its first two stages are near no-ops here — `/i:buildit` le
 
 `/i:shipit` finishing with findings still open is a **successful** run. The PR is up, honest about what is unresolved, and waiting on a human.
 
+## Stage 3 — Label the ticket `one-shot-done`
+
+Only when `/i:shipit` opened the PR — `SHIPPED` or `SHIPPED WITH N OPEN FINDINGS`. A run stopped at the gate or inside `/i:shipit` is not done, and the label would tell whoever triages the board otherwise.
+
+Add the label `one-shot-done` to `<KEY>` using the tracker access order in `docs/intus-skills/tickets-and-branches.md`. **Add, don't replace:** keep every label the ticket already has (with the Jira API, `update: {"labels": [{"add": "one-shot-done"}]}`, not `fields.labels`). Already there → nothing to do.
+
+Change nothing else on the ticket — no status transition, no assignee, no comment. Moving it through the workflow is the human reviewer's call.
+
+A labeling failure does not fail the run: the PR is the deliverable. Report it with the error and the manual fix, and leave `STATUS` as it was.
+
 ## Report
 
 Print the two stages, then quote their reports in full underneath — `/i:buildit`'s and `/i:shipit`'s, which in turn carry `/i:test-first`'s `NOT COVERED`, `/i:implement`'s `PRE-EXISTING`, and `/i:fix`'s `STILL OPEN`. Those three lists are the whole audit trail of an unattended run; a tidy summary that drops them is worth less than no summary.
@@ -84,6 +96,7 @@ BRANCH:   <branch>
 ═══════════════════════════════════════════════
   1 buildit   ✓ green in N attempts    | STOPPED AT <stage>
   2 shipit    ✓ #NNN <url> (draft)     | skipped — gate | STOPPED AT <stage>
+  3 label     ✓ one-shot-done          | skipped | FAILED — <error>
 
 STATUS: SHIPPED | SHIPPED WITH N OPEN FINDINGS | STOPPED AT <stage>
 NEXT:   review the PR   |   <resume command>
