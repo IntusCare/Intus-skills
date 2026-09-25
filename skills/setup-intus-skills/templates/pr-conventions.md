@@ -41,6 +41,18 @@ Auto-include by touched path:
 
 Apply `<label>` to the pull request.
 
+<!-- SEED: delete this section to take pull-request's defaults (top 3 recent authors of the touched
+     files, 12-month lookback). Fill it only for what this repo does differently — a team that
+     should never be auto-requested, a bot account the `[bot]` rule misses, or "don't request
+     reviewers" for repos where CODEOWNERS already does it. -->
+## Reviewers
+
+`pull-request` requests reviews from recent authors of the files in the diff.
+
+- **Cap:** `<n>` reviewers
+- **Lookback:** `<months>` months
+- **Never request:** `<logins or teams>`
+
 <!-- SEED: keep only if the repo has a written review-comment style. Point at it; don't restate it. -->
 ## Review-comment style
 
