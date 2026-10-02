@@ -52,9 +52,9 @@ Once it is approved, they use `/eng-create-epic` to turn it into a Jira epic and
 
 To work a ticket they use `/eng-workon` to branch off `develop`, `/eng-create-feature` to scaffold it, `/eng-test-first` to generate a red suite from the acceptance criteria, and `/eng-implement` (or `/eng-implement-mega`) to turn it green — reaching for `/eng-debug` when a test fails for a reason they can't explain, and `/eng-handoff` when the session has run long enough that a fresh agent should pick it up. Along the way `/eng-ncommit` slices the work into atomic commits and `/eng-sync` keeps the branch current with GitHub.
 
-When it's green, `/eng-shipit` opens the PR, `/eng-review` gives feedback on the branch, and `/eng-fix` iterates on the findings until they're clear. For a well-groomed ticket they collapse that whole stretch into `/eng-buildit` (or `/eng-buildit-mega`) followed by `/eng-shipit`, or go straight from ticket to PR with `/eng-oneshot` (or `/eng-oneshot-mega`).
+When it's green, `/eng-review` gives feedback on the branch, and `/eng-fix` iterates on the findings until they're clear. For a well-groomed ticket they collapse that whole stretch into `/eng-buildit` (or `/eng-buildit-mega`) followed by `/eng-shipit`, or go straight from ticket to PR with `/eng-oneshot` (or `/eng-oneshot-mega`).
 
-Then a human reviews, approves, and merges, and the engineer asks `/eng-what-pr-next` what to pick up next.
+Then a human reviews, approves, and merges, and the engineer asks `/eng-what-prs-next` what to pick up next.
 
 ### Skills
 
@@ -69,7 +69,7 @@ Then a human reviews, approves, and merges, and the engineer asks `/eng-what-pr-
 1. `/eng-create-epic` — **Create Epic.** Create a Jira epic and tickets from a TDD.
 2. `/eng-grill-jira` — **Ticket Interview.** Interview an engineer on a ticket. Defer and record non-engineering questions.
 3. `/eng-grill-mega` → `/eng-to-spec` → `/eng-to-tickets` — **Break Down.** Interview an engineer on a massive ticket and cut it into smaller tickets.
-4. `/eng-what-pr-next` — **Next Up.** What PR should I work on next?
+4. `/eng-what-prs-next` — **Next Up.** What PR should I work on next? Prevents PRs from slipping through the cracks and going stale.
 
 **Build**
 
@@ -78,7 +78,7 @@ Then a human reviews, approves, and merges, and the engineer asks `/eng-what-pr-
 3. `/eng-test-first` — **TDD.** Generate a red test suite based on the acceptance criteria of a ticket.
 4. `/eng-implement` · `/eng-implement-mega` — **Build.** Implement a potentially very large ticket.
 5. `/eng-debug` — **Investigate.** Systematic root-cause debugging.
-6. `/eng-handoff` — **Start Fresh.** Write up a long session so another agent can continue it.
+6. `/eng-handoff` — **Start Fresh.** Write up a long session so another agent can continue it. Standard context engineering. Replaces `/compact`
 
 **Ship**
 
