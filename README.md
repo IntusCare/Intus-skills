@@ -15,8 +15,8 @@ Skills every role uses.
 3. `/share-oneshot-mini` — **Quick Implement.** Implement a small ticket in a single stroke.
 4. `/share-teach` — **Learn.** Learn something about the codebase.
 5. `/share-research` — **Research.** Research a question with citations to primary sources.
-6. `/share-upstream` — **Merge.** Upstream changes from the branch your branch derives from (or another) into your branch.
-7. `/share-pr` · `/share-pr-mini` · `/share-pr-mega` — **Pull Request.** Raise a PR to merge this code up, sized to the change.
+6. `/share-upstream` — **Merge.** Upstream changes from the branch your branch derives from (or another) into your branch. -- I want to take a look, but my gut says let's wait until we need this, or until we see upstreaming go wrong. Another name might be ... "share-pull-latest"
+7. `/share-pr` · `/share-pr-mini` · `/share-pr-mega` — **Pull Request.** Raise a PR to merge this code up, sized to the change. -- upgrade to Matt Pocock 1.3
 
 ---
 
@@ -28,6 +28,7 @@ Give Devin superpowers.
 2. /meta-extract-skill - Publish. Add a skill to the shared repository, abstracting away any specifics.
 3. /meta-setup-intus-skills - Install. Setup a repository for use with Intus skills.
 4. /meta-improve - Continuous Learning. Take what was learned in a session and use it to improve AGENTS.md.
+5. /skill-creator & /skill-doctor - To Do
 
 ---
 
